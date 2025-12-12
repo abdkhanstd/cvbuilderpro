@@ -1,101 +1,161 @@
-# CV Builder Pro
+# 🎓 CV Builder Pro
 
-A multi-user academic CV builder platform built with Next.js, TypeScript, and Prisma.
+```
+ ██████╗██╗   ██╗    ██████╗ ██╗   ██╗██╗██╗     ██████╗ ███████╗██████╗
+██╔════╝██║   ██║    ██╔══██╗██║   ██║██║██║     ██╔══██╗██╔════╝██╔══██╗
+██║     ██║   ██║    ██████╔╝██║   ██║██║██║     ██║  ██║█████╗  ██████╔╝
+██║     ╚██╗ ██╔╝    ██╔══██╗██║   ██║██║██║     ██║  ██║██╔══╝  ██╔══██╗
+╚██████╗ ╚████╔╝     ██████╔╝╚██████╔╝██║███████╗██████╔╝███████╗██║  ██║
+ ╚═════╝  ╚═══╝      ╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝  ╚═╝
+```
 
-## Features
+> **Professional Academic CV Builder Platform** - Create stunning CVs with AI assistance, multiple themes, and advanced sharing capabilities.
 
-- **User Authentication**: Secure login and registration with email verification
-- **Captcha Integration**: Built-in CAPTCHA for spam protection
-- **CV Editor**: Rich text editor for creating professional academic CVs
-- **AI Suggestions**: AI-powered content suggestions and improvements for CV sections
-- **Import Functionality**: Import publications from BibTeX and Google Scholar
-- **Multiple Themes**: Extensive collection of customizable CV themes and layouts
-- **PDF Generation**: High-quality PDF export with proper formatting
-- **Document Export**: Export CVs to DOCX, HTML, and other formats
-- **Photo Upload & Editing**: Upload and crop profile photos with image processing
-- **Section Management**: Drag-and-drop section reordering and customization
-- **Sharing System**: Share CVs with unique links, QR codes, and public access
-- **Admin Dashboard**: Comprehensive admin panel for user management and system oversight
-- **Responsive Design**: Fully responsive interface optimized for desktop and mobile
-- **Real-time Preview**: Live preview of CV changes
-- **Theme Customization**: Advanced theme editor with color and font options
-- **Data Export/Import**: Backup and restore CV data
-- **Email Notifications**: Automated email sending for verification and notifications
-- **Security**: Password hashing, session management, and secure API endpoints
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/abdkhanstd/cvbuilderpro)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-green?style=flat-square&logo=prisma)](https://www.prisma.io/)
 
-## Installation
+## ✨ Features
+
+### 🤖 AI-Powered Features
+- **AI Content Suggestions**: Get intelligent suggestions for improving your CV content
+- **AI CV Review**: Comprehensive AI-powered review and feedback on your CV
+- **AI-Based CV Imports**: Import and enhance CVs from previous versions with AI assistance
+- **Smart Content Generation**: AI helps generate professional descriptions and summaries
+
+### 📝 CV Creation & Editing
+- **Rich Text Editor**: Professional editor for creating academic CVs
+- **Drag-and-Drop Sections**: Easily reorder and customize CV sections
+- **Real-time Preview**: Live preview of changes as you edit
+- **Multiple Layouts**: Choose from various professional layouts
+
+### 🔄 Import & Export
+- **BibTeX Import**: Import publications directly from BibTeX files
+- **Google Scholar Import**: Sync publications from Google Scholar
+- **Multiple Export Formats**: Export to PDF, DOCX, HTML, and more
+- **High-Quality PDF Generation**: Professional PDF output with proper formatting
+
+### 🎨 Customization
+- **Theme Collection**: Extensive library of customizable CV themes
+- **Advanced Theme Editor**: Create custom themes with colors and fonts
+- **Photo Upload & Editing**: Upload and crop profile photos
+- **Responsive Design**: Optimized for desktop and mobile devices
+
+### 🔗 Sharing & Collaboration
+- **CV Sharing System**: Share CVs with unique links and QR codes
+- **Public Access Control**: Set privacy levels for shared CVs
+- **Download Permissions**: Control who can download your shared CVs
+- **View Tracking**: Monitor views and downloads of shared CVs
+
+### 🔐 Security & Administration
+- **User Authentication**: Secure login with email verification
+- **Admin Dashboard**: Comprehensive admin panel for system management
+- **Captcha Integration**: Built-in spam protection
+- **Email Notifications**: Automated verification and notification emails
+
+## 📸 Screenshots
+
+### Dashboard Overview
+![Dashboard](images/1.png)
+
+### CV Editor Interface
+![CV Editor](images/2.png)
+
+### Theme Selection
+![Themes](images/3.png)
+
+### AI Suggestions
+![AI Features](images/4.png)
+
+### CV Preview
+![Preview](images/5.png)
+
+### Admin Panel
+![Admin Dashboard](images/6.png)
+
+### Sharing Features
+![CV Sharing](images/7.png)
+
+## 🚀 Quick Start
 
 ### Prerequisites
-
 - Node.js 18.17.0 or higher
-- PostgreSQL or another database supported by Prisma
+- Database (PostgreSQL recommended, SQLite for development)
 
-### Setup
+### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
-   cd cv-builder-pro
+   git clone https://github.com/abdkhanstd/cvbuilderpro.git
+   cd cvbuilderpro
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. Set up the database:
+3. **Set up the database:**
    ```bash
-   # Configure your database connection in .env
-   # Run database migrations
+   # Configure database connection in .env.local
    npm run db:migrate
-   # Generate Prisma client
    npm run db:generate
-   # Seed the database with initial data
    npm run db:push
    npx prisma db seed
    ```
 
-4. Configure environment variables:
-   Create a `.env.local` file with necessary environment variables (database URL, NextAuth secret, etc.)
+4. **Configure environment variables:**
+   Create `.env.local` with required variables (database URL, NextAuth secret, etc.)
 
-5. Run the development server:
+5. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. **Open your browser:**
+   Visit [http://localhost:3000](http://localhost:3000)
 
-## Admin Account
+## 👨‍💼 Admin Access
 
-A default admin account is created during database seeding:
-- Email: abdkhan@rykhet.com
-- Password: demo
+Default admin account (created during seeding):
+- **Email:** abdkhan@rykhet.com
+- **Password:** demo
 
-Use this account to access administrative features.
+## 🛠️ Tech Stack
 
-## Usage
+- **Framework:** Next.js 15.5.2
+- **Language:** TypeScript
+- **Database:** Prisma ORM with SQLite/PostgreSQL
+- **Authentication:** NextAuth.js
+- **Styling:** Tailwind CSS
+- **PDF Generation:** React PDF
+- **AI Integration:** OpenAI API
+- **Deployment:** Vercel/Railway/Cloudflare
 
-- Register a new account or log in
-- Create and edit your CV using the intuitive editor
-- Choose from various themes and layouts
-- Export your CV in multiple formats
-- Share your CV with others
+## 📖 Usage Guide
 
-## Technologies Used
+1. **Sign Up/Login** - Create an account or log in
+2. **Create CV** - Use the editor to build your professional CV
+3. **AI Enhancement** - Get AI suggestions and reviews
+4. **Customize Theme** - Choose from themes or create custom ones
+5. **Import Data** - Import publications from BibTeX or Google Scholar
+6. **Share & Export** - Share your CV or export in multiple formats
 
-- Next.js 14
-- TypeScript
-- Prisma ORM
-- NextAuth.js
-- Tailwind CSS
-- React PDF
-- Puppeteer
-- And more...
+## 🤝 Contributing
 
-## Contact
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-For support or inquiries, contact: abdkhan@rykhet.com
+## 📧 Support
 
-## License
+For support or inquiries: abdkhan@rykhet.com
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+**Made with ❤️ for the academic community**
 
 This project is private.
