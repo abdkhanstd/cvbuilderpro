@@ -1,18 +1,16 @@
+# Cloudflare Pages Configuration for Next.js
 name = "cvbuilderpro"
 compatibility_date = "2024-01-01"
-compatibility_flags = ["nodejs_compat"]
 
-[build]
-command = "npx @cloudflare/next-on-pages"
+# Pages configuration
+pages_build_output_dir = ".next"
 
-[build.upload]
-format = "modules"
+# For production deployment with custom domain
+# [[pages_build_config]]
+# # Build command and output directory are handled by Pages automatically
+# # when connecting via GitHub
 
-[[build.upload.rules]]
-type = "ESModule"
-globs = ["dist/**/*.js"]
-
-[env.production]
-routes = [
-  { pattern = "/*", zone_name = "yourdomain.com" }  # Replace with your domain
-]
+# [env.production]
+# routes = [
+#   { pattern = "/*", zone_name = "yourdomain.com" }  # Replace with your domain
+# ]
