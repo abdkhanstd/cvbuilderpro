@@ -144,7 +144,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if share already exists
-    const existingShare = await prisma.cVShare.findUnique({
+    const existingShare = await prisma.cVShare.findFirst({
       where: { cvId: params.id },
     });
 
