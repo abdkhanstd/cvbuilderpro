@@ -4,24 +4,31 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create admin user
-  const hashedPassword = await bcrypt.hash('demo', 10);
-  
+  // Create admin user from environment variables
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@example.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminName = process.env.ADMIN_NAME || 'Administrator';
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
   const admin = await prisma.user.upsert({
-    where: { email: 'abdkhan@rykhet.com' },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'abdkhan@rykhet.com',
-      name: 'Admin',
+      email: adminEmail,
+      name: adminName,
       password: hashedPassword,
       role: 'ADMIN',
     },
   });
 
   console.log('✅ Admin user created:');
-  console.log('   Email: abdkhan@rykhet.com');
-  console.log('   Password: demo');
+  console.log('   Email:', adminEmail);
+  console.log('   Password:', adminPassword);
   console.log('   Role:', admin.role);
+  console.log('');
+  console.log('⚠️  IMPORTANT: Change these credentials in production!');
+  console.log('   Set ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_NAME environment variables.');
 }
 
 main()

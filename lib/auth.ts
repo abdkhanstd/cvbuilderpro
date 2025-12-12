@@ -42,14 +42,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("EMAIL_NOT_VERIFIED");
         }
 
-        if (user.email.toLowerCase() === "abdkhan@hotmail.com" && user.role !== "ADMIN") {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { role: "ADMIN" },
-          });
-          user.role = "ADMIN";
-        }
-
         return {
           id: user.id,
           email: user.email,

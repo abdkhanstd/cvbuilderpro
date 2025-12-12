@@ -104,7 +104,7 @@
    ```
 
 4. **Configure environment variables:**
-   Create `.env.local` with required variables (database URL, NextAuth secret, etc.)
+   Create `.env.local` with required variables (database URL, NextAuth secret, admin credentials, etc.)
 
 5. **Start the development server:**
    ```bash
@@ -116,11 +116,19 @@
 
 ## 👨‍💼 Admin Access
 
-Default admin account (created during seeding):
-- **Email:** abdkhan@rykhet.com
-- **Password:** demo
+An admin user is created during database seeding using environment variables:
 
-## 🛠️ Tech Stack
+- **Default Email:** `admin@example.com` (configurable via `ADMIN_EMAIL`)
+- **Default Password:** `admin123` (configurable via `ADMIN_PASSWORD`)
+
+**⚠️ IMPORTANT:** Change these credentials before deploying to production!
+
+Set the following environment variables to customize admin credentials:
+```bash
+ADMIN_EMAIL=your-admin@example.com
+ADMIN_PASSWORD=your-secure-password
+ADMIN_NAME=Your Name
+```
 
 - **Framework:** Next.js 15.5.2
 - **Language:** TypeScript
