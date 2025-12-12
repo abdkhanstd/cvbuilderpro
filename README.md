@@ -51,31 +51,29 @@
 ### 🔐 Security & Administration
 - **User Authentication**: Secure login with email verification
 - **Admin Dashboard**: Comprehensive admin panel for system management
-- **Captcha Integration**: Built-in spam protection
+- **Captcha Integration**: Built-in spam protection *(Note: Current CAPTCHA implementation is basic and not highly secure)*
 - **Email Notifications**: Automated verification and notification emails
 
 ## 📸 Screenshots
 
-### Dashboard Overview
-![Dashboard](images/1.png)
+<p align="center">
+  <img src="images/1.png" width="45%" />
+  <img src="images/2.png" width="45%" />
+</p>
 
-### CV Editor Interface
-![CV Editor](images/2.png)
+<p align="center">
+  <img src="images/3.png" width="45%" />
+  <img src="images/4.png" width="45%" />
+</p>
 
-### Theme Selection
-![Themes](images/3.png)
+<p align="center">
+  <img src="images/5.png" width="45%" />
+  <img src="images/6.png" width="45%" />
+</p>
 
-### AI Suggestions
-![AI Features](images/4.png)
-
-### CV Preview
-![Preview](images/5.png)
-
-### Admin Panel
-![Admin Dashboard](images/6.png)
-
-### Sharing Features
-![CV Sharing](images/7.png)
+<p align="center">
+  <img src="images/7.png" width="30%" />
+</p>
 
 ## 🚀 Quick Start
 
@@ -133,6 +131,10 @@ Default admin account (created during seeding):
 - **AI Integration:** OpenAI API
 - **Deployment:** Vercel/Railway/Cloudflare
 
+## ⚠️ Security Notice
+
+**Important:** The current CAPTCHA implementation is basic and may not provide adequate protection against sophisticated attacks. For production use, consider upgrading to a more robust CAPTCHA solution like Google reCAPTCHA or hCaptcha.
+
 ## 📖 Usage Guide
 
 1. **Sign Up/Login** - Create an account or log in
@@ -152,10 +154,6 @@ For support or inquiries: abdkhan@rykhet.com
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-**Made with ❤️ for the academic community**
-
-This project is private.
+**Note:** This is an academic project intended for educational and personal use. Not recommended for commercial deployment without additional security enhancements.
