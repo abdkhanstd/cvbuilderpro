@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AIService } from "@/lib/ai-service";
-import pdfParse from "pdf-parse";
+import * as pdfParse from "pdf-parse";
 import mammoth from "mammoth";
 
 export async function POST(req: NextRequest) {

@@ -5,12 +5,13 @@ import { prisma } from "@/lib/prisma";
 import { CVEditor } from "@/components/cv/cv-editor";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditCVPage({ params }: PageProps) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
 
@@ -28,7 +29,7 @@ export default async function EditCVPage({ params }: PageProps) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
       include: {

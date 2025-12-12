@@ -5,16 +5,17 @@ import { DownloadButton } from "@/components/cv/download-button";
 import { Eye } from "lucide-react";
 
 interface SharePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function SharePage({ params }: SharePageProps) {
+  const { id } = await params;
   try {
     // Find the share
     const share = await prisma.cVShare.findUnique({
-      where: { shareToken: params.id },
+      where: { shareToken: id },
       include: {
         cv: {
           include: {

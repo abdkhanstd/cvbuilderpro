@@ -6,12 +6,13 @@ import { CVPreviewWrapper } from "@/components/cv/cv-preview-wrapper";
 import { PreviewHeader } from "@/components/cv/preview-header";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function PreviewCVPage({ params }: PageProps) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
@@ -28,7 +29,7 @@ export default async function PreviewCVPage({ params }: PageProps) {
 
   const cv = await prisma.cV.findFirst({
     where: {
-      id: params.id,
+      id: id,
       userId: user.id,
     },
     include: {

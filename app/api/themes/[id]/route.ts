@@ -4,12 +4,13 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 interface RouteContext {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function DELETE(_req: NextRequest, { params }: RouteContext) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
 
@@ -26,7 +27,7 @@ export async function DELETE(_req: NextRequest, { params }: RouteContext) {
     }
 
     const theme = await prisma.customTheme.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     if (!theme || theme.userId !== user.id) {
@@ -34,7 +35,7 @@ export async function DELETE(_req: NextRequest, { params }: RouteContext) {
     }
 
     await prisma.customTheme.delete({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     return NextResponse.json({ success: true });

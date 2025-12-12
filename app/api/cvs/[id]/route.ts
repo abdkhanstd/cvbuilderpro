@@ -4,13 +4,14 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/cvs/[id] - Get a specific CV
 export async function GET(req: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
 
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
       include: {
@@ -62,6 +63,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 // PATCH /api/cvs/[id] - Update a CV
 export async function PATCH(req: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
 
@@ -79,7 +81,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -107,7 +109,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
     if (cvData.profileImage !== undefined) updateData.profileImage = cvData.profileImage;
 
     const updatedCV = await prisma.cV.update({
-      where: { id: params.id },
+      where: { id: id },
       data: updateData,
     });
 
@@ -123,6 +125,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
 // DELETE /api/cvs/[id] - Delete a CV
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
 
@@ -140,7 +143,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -150,7 +153,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.cV.delete({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     // Log activity

@@ -10,13 +10,14 @@ function generateShareToken(): string {
 }
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/cvs/[id]/share - Get share information
 export async function GET(request: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -52,8 +53,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if share exists
-    const share = await prisma.cVShare.findUnique({
-      where: { cvId: params.id },
+    const share = await prisma.cVShare.findFirst({
+      where: { cvId: id },
       include: {
         attachedCvs: {
           include: {
@@ -94,6 +95,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 // POST /api/cvs/[id]/share - Create share link
 export async function POST(request: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -110,7 +112,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -145,7 +147,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Check if share already exists
     const existingShare = await prisma.cVShare.findFirst({
-      where: { cvId: params.id },
+      where: { cvId: id },
     });
 
     if (existingShare) {
@@ -171,7 +173,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Create new share
     const share = await prisma.cVShare.create({
       data: {
-        cvId: params.id,
+        cvId: id,
         userId: user.id,
         shareToken: generateShareToken(),
         isActive: true,
@@ -207,6 +209,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
 // PATCH /api/cvs/[id]/share - Update share settings
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -223,7 +226,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -236,7 +239,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const { isActive, attachedCvs, expiresAt, allowDownload } = body;
 
     const share = await prisma.cVShare.findUnique({
-      where: { cvId: params.id },
+      where: { cvId: id },
     });
 
     if (!share) {
@@ -321,6 +324,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 // DELETE /api/cvs/[id]/share - Stop sharing
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -337,7 +341,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     const cv = await prisma.cV.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id,
       },
     });
@@ -347,7 +351,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const share = await prisma.cVShare.findUnique({
-      where: { cvId: params.id },
+      where: { cvId: id },
     });
 
     if (!share) {
