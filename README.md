@@ -130,6 +130,36 @@ ADMIN_PASSWORD=your-secure-password
 ADMIN_NAME=Your Name
 ```
 
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and configure the following variables:
+
+**Required:**
+- `DATABASE_URL` - Database connection string
+- `NEXTAUTH_SECRET` - Secret key for NextAuth.js
+- `NEXTAUTH_URL` - Base URL for authentication
+
+**Admin Configuration:**
+- `ADMIN_EMAIL` - Admin user email (default: admin@example.com)
+- `ADMIN_PASSWORD` - Admin user password (default: admin123)
+- `ADMIN_NAME` - Admin user name (default: Administrator)
+
+**Email Configuration:**
+- `RESEND_API_KEY` - Resend API key for email sending
+- `EMAIL_FROM` - From email address for outgoing emails
+- `SUPPORT_EMAIL` - Email address for support inquiries (default: support@cvbuilder.com)
+
+**Optional:**
+- `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` - Google reCAPTCHA site key
+- `RECAPTCHA_SECRET_KEY` - Google reCAPTCHA secret key
+- `GOOGLE_SCHOLAR_API_KEY` - Google Scholar API key
+- `AWS_ACCESS_KEY_ID` - AWS access key for S3 storage
+- `AWS_SECRET_ACCESS_KEY` - AWS secret key for S3 storage
+- `AWS_REGION` - AWS region
+- `AWS_S3_BUCKET` - S3 bucket name
+- `APP_URL` - Application URL
+- `NODE_ENV` - Environment (development/production)
+
 - **Framework:** Next.js 15.5.2
 - **Language:** TypeScript
 - **Database:** Prisma ORM with SQLite/PostgreSQL

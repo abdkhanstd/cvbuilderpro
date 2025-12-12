@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     const isSecure = smtpSecurity === "SSL" || smtpSecure === true;
 
     const fromAddress = smtpFrom || smtpUser || "";
-    const supportEmail = "abdkhan@hotmail.com"; // Hidden recipient email
+    const supportEmail = process.env.SUPPORT_EMAIL || "support@cvbuilder.com"; // Support recipient email
 
     let transporter;
     let accessToken = msAccessToken;
