@@ -154,6 +154,12 @@ For support or inquiries: abdkhan@rykhet.com
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed for **personal and educational use only**. Commercial use is strictly prohibited.
 
-**Note:** This is an academic project intended for educational and personal use. Not recommended for commercial deployment without additional security enhancements.
+**Terms:**
+- ✅ **Personal use:** Allowed for individual academic and professional CV creation
+- ✅ **Educational use:** Permitted for learning and teaching purposes
+- ❌ **Commercial use:** Not allowed for any business or commercial purposes
+- ❌ **Redistribution:** Not permitted without explicit permission
+
+**Note:** This is an academic project intended for educational and personal use. Not recommended for commercial deployment without additional security enhancements and proper licensing arrangements.
