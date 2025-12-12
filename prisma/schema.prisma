@@ -1,0 +1,517 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  role          String    @default("FREE")
+  resetToken    String?
+  resetTokenExpiry DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  cvs          CV[]
+  sessions     Session[]
+  accounts     Account[]
+  profile      UserProfile?
+  sharedCVs    CVShare[]
+  comments     CVComment[]
+  activities   UserActivity[]
+  customThemes CustomTheme[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone              String?
+  location           String?
+  website            String?
+  bio                String?
+  profileImage       String?
+  linkedin           String?
+  googleScholar      String?
+  orcid              String?
+  researchGate       String?
+  github             String?
+  twitter            String?
+  hIndex             Int?
+  totalCitations     Int?
+  defaultTemplate    String   @default("PROFESSIONAL")
+  autoSaveEnabled    Boolean  @default(true)
+  emailNotifications Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("user_profiles")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model AISettings {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  openRouterKey        String?
+  openRouterModel      String?  @default("meta-llama/llama-3.2-3b-instruct:free")
+  openRouterFallbackModels String? // JSON array of fallback models
+  claudeKey            String?
+  claudeModel          String?  @default("claude-3-5-sonnet-20241022")
+  ollamaUrl            String?  @default("http://localhost:11434")
+  ollamaModel          String?  @default("llama3.2")
+  defaultProvider      String   @default("OPENROUTER")
+  aiSuggestionsEnabled Boolean  @default(true)
+  autoImproveText      Boolean  @default(false)
+  citationAssist       Boolean  @default(true)
+  grammarCheck         Boolean  @default(true)
+  // Email/SMTP Settings
+  smtpHost             String?
+  smtpPort             Int      @default(587)
+  smtpUser             String?
+  smtpPassword         String?
+  smtpFrom             String?
+  smtpFromName         String?  @default("CV Builder")
+  smtpSecure           Boolean  @default(false)
+  smtpSecurity         String   @default("STARTTLS") // STARTTLS, SSL, NONE
+  emailVerificationEnabled Boolean @default(true)
+  emailNotificationsEnabled Boolean @default(true)
+  // Microsoft OAuth2 for Email (required for Outlook.com personal)
+  msClientId           String?
+  msClientSecret       String?
+  msTenantId           String?  @default("common")
+  msRefreshToken       String?
+  msAccessToken        String?
+  msTokenExpiry        DateTime?
+  emailProvider        String   @default("SMTP") // SMTP or MICROSOFT
+  // Sharing settings (admin-configurable)
+  baseUrl              String?  // Public base URL used for share links (e.g. https://cvbuilder.com)
+  enableSharing        Boolean  @default(true)
+  maxSharedCvs         Int      @default(10)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("ai_settings")
+}
+
+model CV {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  template       String    @default("PROFESSIONAL")
+  theme          String    @default("modern-blue")
+  themeConfig    String?
+  themeData      String? // JSON string of custom theme configuration
+  sectionOrder   String? // JSON string of section order configuration
+  citationStyle  String    @default("APA") // APA, IEEE, MLA, Chicago, Harvard, Vancouver
+  showNumbering  Boolean   @default(true) // Show [1], [2] numbering in publications
+  numberingStyle String    @default("grouped") // 'grouped' [J1], [C1] or 'sequential' [1], [2]
+  publicationsGroupBy String @default("none") // 'none', 'type' (journal/conference)
+  publicationsSortBy  String @default("date") // 'date', 'rank', 'custom'
+  layout         String    @default("classic-single")
+  category       String    @default("ACADEMIC")
+  isPublic       Boolean   @default(false)
+  fullName       String?
+  headline       String?
+  email          String?
+  phone          String?
+  location       String?
+  website        String?
+  linkedin       String?
+  github         String?
+  googleScholar  String?
+  summary        String?
+  profileImage   String?
+  hIndex         Int?
+  totalCitations Int?
+  i10Index       Int?
+  version        Int       @default(1)
+  parentId       String?
+  parent         CV?       @relation("CVVersions", fields: [parentId], references: [id])
+  versions       CV[]      @relation("CVVersions")
+  viewCount      Int       @default(0)
+  downloadCount  Int       @default(0)
+  lastViewedAt   DateTime?
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  education      Education[]
+  experience     Experience[]
+  publications   Publication[]
+  skills         Skill[]
+  certifications Certification[]
+  awards         Award[]
+  languages      Language[]
+  projects       Project[]
+  references     Reference[]
+  customSections CustomSection[]
+  socialLinks    SocialLink[]
+  shares         CVShare[]
+  comments       CVComment[]
+  exports        CVExport[]
+  contactInfo    ContactInfo[]
+  shareAttachments CVShareAttachment[]
+
+  @@index([userId])
+  @@map("cvs")
+}
+
+model Education {
+  id          String    @id @default(cuid())
+  cvId        String
+  cv          CV        @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  institution String
+  degree      String
+  field       String?
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean   @default(false)
+  gpa         String?
+  description String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([cvId])
+  @@map("education")
+}
+
+model Experience {
+  id           String    @id @default(cuid())
+  cvId         String
+  cv           CV        @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  company      String
+  position     String
+  location     String?
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String?
+  achievements String?
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([cvId])
+  @@map("experience")
+}
+
+model Publication {
+  id           String   @id @default(cuid())
+  cvId         String
+  cv           CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  type         String   @default("JOURNAL")
+  title        String
+  authors      String?
+  journal      String?
+  conference   String?
+  year         Int
+  volume       String?
+  issue        String?
+  pages        String?
+  doi          String?
+  url          String?
+  abstract     String?
+  citations    Int?
+  impactFactor Float?
+  jcrZone      String?
+  casZone      String?
+  scholarId    String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("publications")
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  cvId      String
+  cv        CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  name      String
+  category  String?
+  level     Int?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("skills")
+}
+
+model Certification {
+  id            String    @id @default(cuid())
+  cvId          String
+  cv            CV        @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  name          String
+  issuer        String
+  issueDate     DateTime
+  expiryDate    DateTime?
+  credentialId  String?
+  credentialUrl String?
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([cvId])
+  @@map("certifications")
+}
+
+model Award {
+  id          String   @id @default(cuid())
+  cvId        String
+  cv          CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  title       String
+  issuer      String
+  date        DateTime
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("awards")
+}
+
+model Language {
+  id          String   @id @default(cuid())
+  cvId        String
+  cv          CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  name        String
+  proficiency String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("languages")
+}
+
+model Project {
+  id           String    @id @default(cuid())
+  cvId         String
+  cv           CV        @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  role         String?
+  startDate    DateTime?
+  endDate      DateTime?
+  url          String?
+  technologies String?
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([cvId])
+  @@map("projects")
+}
+
+model Reference {
+  id           String   @id @default(cuid())
+  cvId         String
+  cv           CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  name         String
+  position     String
+  organization String
+  email        String?
+  phone        String?
+  relationship String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("references")
+}
+
+model CustomSection {
+  id        String   @id @default(cuid())
+  cvId      String
+  cv        CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("custom_sections")
+}
+
+model SocialLink {
+  id        String   @id @default(cuid())
+  cvId      String
+  cv        CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  platform  String
+  url       String
+  qrCode    String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("social_links")
+}
+
+model CVComment {
+  id         String   @id @default(cuid())
+  cvId       String
+  cv         CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sectionId  String?
+  content    String
+  isResolved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("cv_comments")
+}
+
+model CVExport {
+  id        String   @id @default(cuid())
+  cvId      String
+  cv        CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  format    String
+  fileName  String
+  fileUrl   String?
+  fileSize  Int?
+  createdAt DateTime @default(now())
+
+  @@index([cvId])
+  @@map("cv_exports")
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  metadata  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("user_activities")
+}
+
+model ContactInfo {
+  id        String   @id @default(cuid())
+  cvId      String
+  cv        CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  type      String // "email", "phone", "mobile", "whatsapp", "telegram", etc.
+  value     String
+  label     String? // "Work", "Personal", "Mobile", etc.
+  isPrimary Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cvId])
+  @@map("contact_info")
+}
+
+model CustomTheme {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  themeData   String // JSON string of the theme configuration
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("custom_themes")
+}
+
+model CVShare {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cvId           String
+  cv             CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  shareToken     String   @unique
+  permission     String   @default("VIEW") // VIEW, EDIT, DOWNLOAD
+  expiresAt      DateTime?
+  isActive       Boolean  @default(true)
+  viewCount      Int      @default(0)
+  downloadCount  Int      @default(0)
+  allowDownload  Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  attachedCvs CVShareAttachment[]
+
+  @@index([userId])
+  @@index([cvId])
+  @@index([shareToken])
+  @@map("cv_shares")
+}
+
+model CVShareAttachment {
+  id      String  @id @default(cuid())
+  shareId String
+  share   CVShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  cvId    String
+  cv      CV      @relation(fields: [cvId], references: [id], onDelete: Cascade)
+
+  @@unique([shareId, cvId])
+  @@index([shareId])
+  @@index([cvId])
+  @@map("cv_share_attachments")
+}
